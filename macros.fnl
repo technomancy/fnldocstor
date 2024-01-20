@@ -1,5 +1,5 @@
 ;; directory used to auto-load docsets
-(var *data-dir* (or (match os {: getenv} (getenv :FNLDOCSTOR_DATADIR))
+(var *data-dir* (or (match _G.os {: getenv} (getenv :FNLDOCSTOR_DATADIR))
                     "fnldocstor.data"))
 
 (λ over-values [f ...]

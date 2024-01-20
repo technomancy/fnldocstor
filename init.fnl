@@ -6,8 +6,7 @@
 
 ; This is a macro so we can generate static requires for --require-as-include
 (macro gen-requires [version]
-  (import-macros {: get-data-dir} :fnldocstor.macros)
-  (local data (string.gsub (get-data-dir) "/+$" ""))
+  (local data :data)
   (local req #`(let [docset# (require ,$)]
                   (tset package.loaded ,$ nil)
                   docset#))
@@ -17,8 +16,8 @@
        :lua_5_2 ,(req (.. data :.lua_5_2))
        :lua_5_3 ,(req (.. data :.lua_5_3))
        :luajit  ,(req (.. data :.luajit))
-       (->> (format "Unable to load docsets for _VERSION %s\n" version#)
-            (pcall io.stderr.write io.stderr)))))
+       _# (->> (format "Unable to load docsets for _VERSION %s\n" version#)
+               (pcall io.stderr.write io.stderr)))))
 
 ; used to track how many items we've set metadata on
 (fn counter []
