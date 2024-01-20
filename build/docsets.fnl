@@ -1,9 +1,9 @@
 #!/usr/bin/env fennel
-(import-macros {: over-values : get-data-dir} :fnldocstor.macros)
-(local (fennel view request json)
-       (over-values require :fennel :fennelview :http.request :dkjson))
+(import-macros {: get-data-dir} :macros)
+(local fennel (require :fennel))
+(local json (require :dkjson))
 
-(local *unpack (or unpack table.unpack))
+(local *unpack (or _G.unpack table.unpack))
 (local docsets
        {:love "https://raw.githubusercontent.com/rm-code/love-atom/master/data/love-completions.json"
         :lua_5_1 "https://raw.githubusercontent.com/dapetcu21/atom-autocomplete-lua/master/lib/stdlib/5_1.json"
@@ -32,15 +32,15 @@ If src is not a table, src itself will be inserted into the new table."
 
 (λ write-file [path data]
   (let [file (io.open path :w)
-        data (match (data:sub -1) "\n" data (.. data "\n"))
+        data (match (data:sub -1) "\n" data _ (.. data "\n"))
         finish (fn [ok ...] (file:close) (if ok ... (error ... 0)))]
     (finish (pcall file.write file data))))
 
 (fn fetch [url]
-  (let [(headers stream) (assert (: (request.new_from_uri url) :go))
-        body             (assert (stream:get_body_as_string))]
-    (when (not= :200 (headers:get ::status)) (error body))
-    (values body headers)))
+  (let [curl (io.popen (.. "curl -q -k -s " url))
+        body (curl:read :*all)]
+    (when (not (curl:close)) (error body))
+    body))
 
 (local paths {:processed #(-> (get-data-dir)
                               (: :gsub "^fnldocstor%." "") (: :gsub "%." "/")
@@ -53,7 +53,7 @@ If src is not a table, src itself will be inserted into the new table."
         txt    (fetch url)
         docset (json.decode txt)
         path   (paths.raw key)]
-    (write-file path (view docset))
+    (write-file path (fennel.view docset))
     [key docset]))
 
 (fn mk-doc [path] {:path (or path []) :fields {} :meta {}})
@@ -92,7 +92,7 @@ If src is not a table, src itself will be inserted into the new table."
         out      (paths.processed key)]
     (local docset (mk-doc []))
     (build-doc-field docset :_G data.global)
-    (write-file out (view docset))))
+    (write-file out (fennel.view docset))))
 
 (match arg
   [:keys]      (each [k (pairs docsets)] (print k))
