@@ -1,4 +1,4 @@
-DOCSETS := love.fnl luajit.fnl lua_5_1.fnl lua_5_2.fnl lua_5_3.fnl
+DOCSETS := love.fnl luajit.fnl lua_5_1.fnl lua_5_2.fnl lua_5_3.fnl lua_5_4.fnl
 RAW_DOCSETS := $(addprefix build/,$(DOCSETS))
 PROCESSED_DOCSETS := $(addprefix data/,$(DOCSETS))
 FENNEL ?= fennel
@@ -14,6 +14,9 @@ ifdef LUA_PATH_5_2
 endif
 ifdef LUA_PATH_5_3
   export LUA_PATH_5_3 := "$(LUA_LOCAL);$(or $(LUA_PATH_5_3),;;)"
+endif
+ifdef LUA_PATH_5_4
+  export LUA_PATH_5_4 := "$(LUA_LOCAL);$(or $(LUA_PATH_5_4),;;)"
 endif
 
 docs: $(PROCESSED_DOCSETS)

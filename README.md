@@ -6,7 +6,8 @@ for functions in Lua's standard library right from the fennel REPL!
 
 ![Sample screenshot](screenshot.png)
 
-Comes preloaded with docsets for **Lua 5.1**, **Lua 5.2**, **Lua 5.3**, **LuaJIT**, and **love2d**.
+Comes preloaded with docsets for **Lua 5.1**, **Lua 5.2**, **Lua
+5.3**, **Lua 5.4**, **LuaJIT**, and **love2d**.
 
 **Note:** This library is still somewhat unstable. It works, but the
 docstring formatting and configuration options are still a work in progress.

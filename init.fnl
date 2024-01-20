@@ -15,6 +15,7 @@
        :lua_5_1 ,(req (.. data :.lua_5_1))
        :lua_5_2 ,(req (.. data :.lua_5_2))
        :lua_5_3 ,(req (.. data :.lua_5_3))
+       :lua_5_4 ,(req (.. data :.lua_5_4))
        :luajit  ,(req (.. data :.luajit))
        _# (->> (format "Unable to load docsets for _VERSION %s\n" version#)
                (pcall io.stderr.write io.stderr)))))
