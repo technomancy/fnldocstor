@@ -14,17 +14,21 @@ docstring formatting and configuration options are still a work in progress.
 
 ## Install
 
-**Requires:** fennel >= 0.4.0
+**Requires:** fennel
 
-Simply drop this directory somewhere on your `package.path`.
+Run `make` and then add this to `~/.fennelrc`:
 
-*TODO: Publish to luarocks*
+```fennel
+((dofile (.. (os.getenv "HOME") "/src/fnldocstor/fnldocstor.lua")))
+```
+
+Requires `curl` to fetch new docsets.
 
 ## Usage
 
 ### Auto-load docset for running Lua version
 
-```clojure
+```fennel
 (local docstor (require :fnldocstor))
 (docstor.install)
 ```
@@ -32,13 +36,13 @@ Simply drop this directory somewhere on your `package.path`.
 For REPL convenience, you can also call the module as a function via its
 `__call` metatable:
 
-```clojure
+```fennel
 ((require :fnldocstor))
 ```
 
 It can optionally receive a table to override target Lua / global env:
 
-```clojure
+```fennel
 ((require :fnldocstor) {:version _VERSION :env _G})
 ```
 
@@ -46,7 +50,7 @@ It can optionally receive a table to override target Lua / global env:
 
 Put the following in `$HOME/.fennelrc` or `$HOME/.config/fennel/fennelrc`:
 
-```clojure
+```fennel
 (when (not (pcall #((require :fnldocstor))))
   (io.stderr:write "Warning: failed to autoload fnldocstor\n"))
 ```
@@ -56,7 +60,7 @@ Put the following in `$HOME/.fennelrc` or `$HOME/.config/fennel/fennelrc`:
 You can also load an arbitrary docset onto any arbitrary function or table of
 functions. It will recur through both, setting metadata on matching field paths.
 
-```clojure
+```fennel
 (local greet #(print (.. "Hi, " $ "!")))
 (docstor.load-docset greet {:meta {:fnl/docstring "Says hi"
                                    :fnl/arglist ["name"]}})
@@ -71,7 +75,7 @@ functions. It will recur through both, setting metadata on matching field paths.
 The docset should be in the following format; for full examples, see the
 [data/](data) directory.
 
-```clojure
+```fennel
 {:fields {field1 {:meta {:fnl/arglist   [...]  ; table<string>: table of argnames
                          :fnl/docstring docstr ; string:        the docstring
                          :docstor/link  link   ; ?string:       optional url to fn docs}

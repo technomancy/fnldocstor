@@ -19,12 +19,12 @@ ifdef LUA_PATH_5_4
   export LUA_PATH_5_4 := "$(LUA_LOCAL);$(or $(LUA_PATH_5_4),;;)"
 endif
 
+fnldocstor.lua: $(PROCESSED_DOCSETS) init.fnl macros.fnl
+	fennel --compile --require-as-include --metadata init.fnl > fnldocstor.lua
+
 docs: $(PROCESSED_DOCSETS)
 
 fetchdocs: ; $(FENNEL) ./build/docsets.fnl fetch
-
-luabuild: $(PROCESSED_DOCSETS) init.fnl macros.fnl
-	fennel --compile --require-as-include --metadata init.fnl > fnldocstor.lua
 
 clean:
 	rm -f $(RAW_DOCSETS)
